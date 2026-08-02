@@ -39,6 +39,11 @@ def process_raw_email(raw_email: bytes) -> bytes:
 
 
 def extract_html_body(raw_email: bytes) -> str:
+    """
+    Extracts the HTML body from a raw email.
+    Used to generate preview.html.
+    """
+
     message = BytesParser(policy=policy.default).parsebytes(raw_email)
 
     if message.is_multipart():
@@ -50,6 +55,7 @@ def extract_html_body(raw_email: bytes) -> str:
         return message.get_content()
 
     return ""
+
 
 if __name__ == "__main__":
     test_email = EmailMessage()
@@ -72,12 +78,12 @@ if __name__ == "__main__":
 
     processed_email = process_raw_email(test_email.as_bytes())
 
-html_result = extract_html_body(processed_email)
+    html_result = extract_html_body(processed_email)
 
-if html_result:
-    with open("preview.html", "w", encoding="utf-8") as file:
-        file.write(html_result)
+    if html_result:
+        with open("preview.html", "w", encoding="utf-8") as file:
+            file.write(html_result)
 
-    print("HTML preview generated: preview.html")
-else:
-    print("No HTML body found in the email.")
+        print("HTML preview generated: preview.html")
+    else:
+        print("No HTML body found.")
