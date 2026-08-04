@@ -15,6 +15,10 @@ def process_raw_email(raw_email: bytes) -> bytes:
 
     message = BytesParser(policy=policy.default).parsebytes(raw_email)
 
+    if message.get("X-Signature-Processed", "").lower() == "true":
+        print("Email already processed. Skipping signature injection.")
+        return message.as_bytes(policy=policy.SMTP)
+
     sender_header = message.get("From")
     sender_email = parseaddr(sender_header)[1]
 
