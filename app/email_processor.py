@@ -35,7 +35,7 @@ def process_raw_email(raw_email: bytes) -> bytes:
 
     message["X-Signature-Processed"] = "true"
 
-    return message.as_bytes()
+    return message.as_bytes(policy=policy.SMTP)
 
 
 def extract_html_body(raw_email: bytes) -> str:
