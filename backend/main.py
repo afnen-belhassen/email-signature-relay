@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 
 from user_service import get_user_by_email
 
+from graph_service import is_graph_configured
 app = FastAPI()
 
 
@@ -19,3 +20,9 @@ def get_user(email: str):
         raise HTTPException(status_code=404, detail="User not found")
 
     return user
+
+@app.get("/graph/status")
+def graph_status():
+    return {
+        "configured": is_graph_configured()
+    }
