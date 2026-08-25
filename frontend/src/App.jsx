@@ -3,6 +3,7 @@ import "./App.css";
 import Dashboard from "./pages/Dashboard";
 import Directory from "./pages/Directory";
 import Settings from "./pages/Settings";
+import Signatures from "./pages/Signatures";
 
 const NAV_ITEMS = [
   { id: "dashboard", label: "Dashboard" },
@@ -37,12 +38,7 @@ function App() {
       case "dashboard":
         return <Dashboard />;
       case "signatures":
-        return (
-          <PlaceholderPage
-            title="Signatures"
-            description="Create and manage HTML signature templates."
-          />
-        );
+        return <Signatures />;
       case "assignments":
         return (
           <PlaceholderPage

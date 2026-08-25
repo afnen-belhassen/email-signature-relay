@@ -30,6 +30,29 @@ export function getSignatures() {
   return fetchJson("/signatures");
 }
 
+export function getSignature(templateId) {
+  return fetchJson(`/signatures/${templateId}`);
+}
+
+export function getSignaturePreview(templateId, email) {
+  const query = email ? `?email=${encodeURIComponent(email)}` : "";
+  return fetchJson(`/signatures/${templateId}/preview${query}`);
+}
+
+export async function updateSignature(templateId, data) {
+  const response = await fetch(`${API_BASE}/signatures/${templateId}`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+
+  if (!response.ok) {
+    throw new Error(`API error: ${response.status}`);
+  }
+
+  return response.json();
+}
+
 export function getLogs(limit = 5) {
   return fetchJson(`/logs?limit=${limit}`);
 }

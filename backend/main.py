@@ -1,13 +1,23 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 from graph_service import is_graph_configured
 from log_service import get_logs, get_processed_email_count_today
 from relay_service import get_relay_status
-from signature_service import get_signature_templates
+from signature_service import (
+    get_signature_template,
+    get_signature_templates,
+    render_signature_preview,
+    set_template_active,
+)
 from user_service import get_all_users, get_user_by_email
 
 app = FastAPI()
+
+
+class SignatureUpdate(BaseModel):
+    active: bool
 
 app.add_middleware(
     CORSMiddleware,
@@ -71,6 +81,32 @@ def list_signatures():
         "count": len(templates),
         "active_count": active_count,
     }
+
+
+@app.get("/signatures/{template_id}")
+def get_signature(template_id: str):
+    template = get_signature_template(template_id)
+
+    if not template:
+        raise HTTPException(status_code=404, detail="Template not found")
+
+    return template
+
+
+@app.get("/signatures/{template_id}/preview")
+def preview_signature(template_id: str, email: str | None = None):
+    try:
+        return render_signature_preview(template_id, email=email)
+    except ValueError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
+
+
+@app.patch("/signatures/{template_id}")
+def update_signature(template_id: str, update: SignatureUpdate):
+    try:
+        return set_template_active(template_id, update.active)
+    except ValueError as error:
+        raise HTTPException(status_code=404, detail=str(error)) from error
 
 
 @app.get("/logs")
