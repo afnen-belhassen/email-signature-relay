@@ -1,31 +1,26 @@
 import { useCallback, useEffect, useState } from "react";
 import { getDashboardData } from "../api/client";
 import ApiError from "../components/ApiError";
-import StatusBadge from "../components/StatusBadge";function StatCard({ label, value, detail, variant }) {  return (
+import StatusBadge from "../components/StatusBadge";
+
+function StatCard({ label, value, detail, variant }) {
+  return (
+    <div className="stat-card">
+      <p>{label}</p>
+      <h2>{value}</h2>
+      {detail && <span className={variant}>{detail}</span>}
+    </div>
+  );
+}
+
+function StatCardSkeleton() {
+  return (
     <div className="stat-card stat-card--loading">
       <div className="skeleton skeleton-text skeleton-text--sm" />
       <div className="skeleton skeleton-text skeleton-text--lg" />
       <div className="skeleton skeleton-text skeleton-text--sm" />
     </div>
   );
-}
-
-function StatusBadge({ status }) {
-  const labels = {
-    online: "Connected",
-    offline: "Offline",
-    connected: "Connected",
-    not_configured: "Not configured",
-  };
-
-  const className =
-    status === "online" || status === "connected"
-      ? "status-online"
-      : status === "offline"
-        ? "status-offline"
-        : "status-pending";
-
-  return <span className={className}>{labels[status] ?? status}</span>;
 }
 
 function formatActivityTime(timestamp) {
@@ -87,13 +82,7 @@ export default function Dashboard() {
         </div>
       </header>
 
-      {error && (
-        <div className="alert alert-error">
-          <strong>Backend unavailable.</strong> Start FastAPI with{" "}
-          <code>uvicorn main:app --reload</code> from the <code>backend/</code>{" "}
-          folder. ({error})
-        </div>
-      )}
+      <ApiError error={error} />
 
       <section className="stats">
         {loading && !data ? (
@@ -154,9 +143,7 @@ export default function Dashboard() {
 
               <div className="status-row">
                 <span>SMTP Relay</span>
-                <StatusBadge
-                  status={relayRunning ? "online" : "offline"}
-                />
+                <StatusBadge status={relayRunning ? "online" : "offline"} />
               </div>
 
               <div className="status-row">

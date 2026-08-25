@@ -380,6 +380,92 @@ nav {
   color: #111827;
 }
 
+.panel-header--row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.panel-subtitle {
+  margin: 6px 0 0;
+  color: #6b7280;
+  font-size: 13px;
+}
+
+.source-badge {
+  background: #eff6ff;
+  color: #1d4ed8;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 999px;
+}
+
+.table-wrap {
+  overflow-x: auto;
+}
+
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 14px;
+}
+
+.data-table th,
+.data-table td {
+  padding: 12px 10px;
+  text-align: left;
+  border-bottom: 1px solid #f0f0f0;
+  color: #111827;
+}
+
+.data-table th {
+  color: #6b7280;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.data-table tbody tr:last-child td {
+  border-bottom: none;
+}
+
+.config-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid #f0f0f0;
+  color: #111827;
+}
+
+.config-row:last-of-type {
+  border-bottom: none;
+}
+
+.config-row strong {
+  color: #111827;
+  font-weight: 600;
+}
+
+.config-note {
+  margin: 16px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid #f0f0f0;
+  color: #6b7280;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.config-note code {
+  background: #f3f4f6;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
 @media (max-width: 900px) {
   .stats {
     grid-template-columns: repeat(2, 1fr);
