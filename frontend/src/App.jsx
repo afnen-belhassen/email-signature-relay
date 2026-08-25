@@ -1,6 +1,71 @@
+import { useState } from "react";
 import "./App.css";
+import Dashboard from "./pages/Dashboard";
+import Directory from "./pages/Directory";
+import Settings from "./pages/Settings";
+
+const NAV_ITEMS = [
+  { id: "dashboard", label: "Dashboard" },
+  { id: "signatures", label: "Signatures" },
+  { id: "assignments", label: "Assignments" },
+  { id: "directory", label: "Directory" },
+  { id: "logs", label: "Logs" },
+  { id: "settings", label: "Settings" },
+];
+
+function PlaceholderPage({ title, description }) {
+  return (
+    <>
+      <header className="topbar">
+        <div>
+          <h1>{title}</h1>
+          <p>{description}</p>
+        </div>
+      </header>
+      <div className="panel placeholder-panel">
+        <p>This page is coming soon.</p>
+      </div>
+    </>
+  );
+}
 
 function App() {
+  const [activePage, setActivePage] = useState("dashboard");
+
+  const renderPage = () => {
+    switch (activePage) {
+      case "dashboard":
+        return <Dashboard />;
+      case "signatures":
+        return (
+          <PlaceholderPage
+            title="Signatures"
+            description="Create and manage HTML signature templates."
+          />
+        );
+      case "assignments":
+        return (
+          <PlaceholderPage
+            title="Assignments"
+            description="Assign templates to users, groups, or departments."
+          />
+        );
+      case "directory":
+        return <Directory />;
+      case "logs":
+        return (
+          <PlaceholderPage
+            title="Logs"
+            description="Review processed emails and injection results."
+          />
+        );
+      case "settings":
+        return <Settings />;
+      default:
+        return <Dashboard />;
+    }
+  };
+
   return (
     <div className="app">
       <aside className="sidebar">
@@ -10,92 +75,20 @@ function App() {
         </div>
 
         <nav>
-          <button className="nav-item active">Dashboard</button>
-          <button className="nav-item">Signatures</button>
-          <button className="nav-item">Assignments</button>
-          <button className="nav-item">Directory</button>
-          <button className="nav-item">Logs</button>
-          <button className="nav-item">Settings</button>
+          {NAV_ITEMS.map((item) => (
+            <button
+              key={item.id}
+              type="button"
+              className={`nav-item${activePage === item.id ? " active" : ""}`}
+              onClick={() => setActivePage(item.id)}
+            >
+              {item.label}
+            </button>
+          ))}
         </nav>
       </aside>
 
-      <main className="main-content">
-        <header className="topbar">
-          <div>
-            <h1>Dashboard</h1>
-            <p>Manage your organization's email signatures.</p>
-          </div>
-
-          <div className="user">
-            <div className="avatar">AB</div>
-
-            <div>
-              <strong>Administrator</strong>
-              <p>admin@company.com</p>
-            </div>
-          </div>
-        </header>
-
-        <section className="stats">
-          <div className="stat-card">
-            <p>Relay status</p>
-            <h2>Online</h2>
-            <span className="success">● Running</span>
-          </div>
-
-          <div className="stat-card">
-            <p>Directory users</p>
-            <h2>1</h2>
-            <span>Local data</span>
-          </div>
-
-          <div className="stat-card">
-            <p>Signature templates</p>
-            <h2>1</h2>
-            <span>Active template</span>
-          </div>
-
-          <div className="stat-card">
-            <p>Processed emails</p>
-            <h2>0</h2>
-            <span>Today</span>
-          </div>
-        </section>
-
-        <section className="content-grid">
-          <div className="panel">
-            <div className="panel-header">
-              <h2>System status</h2>
-            </div>
-
-            <div className="status-row">
-              <span>SMTP Relay</span>
-              <span className="status-online">Connected</span>
-            </div>
-
-            <div className="status-row">
-              <span>Microsoft Graph</span>
-              <span className="status-pending">Not configured</span>
-            </div>
-
-            <div className="status-row">
-              <span>Microsoft 365</span>
-              <span className="status-pending">Not configured</span>
-            </div>
-          </div>
-
-          <div className="panel">
-            <div className="panel-header">
-              <h2>Recent activity</h2>
-            </div>
-
-            <div className="empty-state">
-              <p>No email activity yet.</p>
-              <span>Processed emails will appear here.</span>
-            </div>
-          </div>
-        </section>
-      </main>
+      <main className="main-content">{renderPage()}</main>
     </div>
   );
 }
