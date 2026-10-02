@@ -1,3 +1,6 @@
 Jinja2
 aiosmtpd
 pytest
+python-dotenv
+msal
+requests
