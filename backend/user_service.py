@@ -1,24 +1,8 @@
-from backend.graph_service import get_user_by_email as get_graph_user_by_email
-import json 
-from pathlib import Path
-
-USERS_FILE = (
-    Path(__file__).resolve().parent.parent
-    / "data"
-    / "users.json"
+from backend.graph_service import (
+    get_user_by_email as get_graph_user_by_email,
+    get_all_users as get_graph_all_users,
 )
-def get_all_users() -> list[dict]:
-    if not USERS_FILE.exists():
-        return []
 
-    with open(
-        USERS_FILE,
-        "r",
-        encoding="utf-8"
-    ) as file:
-        users = json.load(file)
-
-    return list(users.values())
 
 def _map_graph_user(graph_user: dict) -> dict:
     business_phones = graph_user.get("businessPhones") or []
@@ -50,3 +34,12 @@ def get_user_by_email(email: str):
         return None
 
     return _map_graph_user(graph_user)
+
+
+def get_all_users() -> list[dict]:
+    graph_users = get_graph_all_users()
+
+    return [
+        _map_graph_user(user)
+        for user in graph_users
+    ]
