@@ -5,7 +5,7 @@ from email.message import EmailMessage
 def send_test_email():
     message = EmailMessage()
 
-    message["From"] = "Afnen Belhassen <afnen.belhassen@esprit.tn>"
+    message["From"] = "Afnen Belhassen <afnen.belhassen@intern-insomea.com>"
     message["To"] = "client@example.com"
     message["Subject"] = "Test email through SMTP relay"
 
