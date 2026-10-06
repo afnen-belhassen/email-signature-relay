@@ -2,16 +2,16 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 
-from graph_service import is_graph_configured
-from log_service import get_logs, get_processed_email_count_today
-from relay_service import get_relay_status
-from signature_service import (
+from backend.graph_service import is_graph_configured
+from backend.log_service import get_logs, get_processed_email_count_today
+from backend.relay_service import get_relay_status
+from backend.signature_service import (
     get_signature_template,
     get_signature_templates,
     render_signature_preview,
     set_template_active,
 )
-from user_service import get_all_users, get_user_by_email
+from backend.user_service import get_all_users, get_user_by_email
 
 app = FastAPI()
 

@@ -3,7 +3,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from user_service import get_all_users, get_user_by_email
+from backend.user_service import get_all_users, get_user_by_email
 
 TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 CONFIG_FILE = Path(__file__).resolve().parent.parent / "data" / "signatures.json"
