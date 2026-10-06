@@ -99,3 +99,42 @@ def get_user_by_email(email):
 
     response.raise_for_status()
     return response.json()
+
+def get_all_users():
+    token = get_access_token()
+
+    url = "https://graph.microsoft.com/v1.0/users"
+
+    params = {
+        "$select": (
+            "displayName,"
+            "mail,"
+            "userPrincipalName,"
+            "jobTitle,"
+            "department,"
+            "businessPhones,"
+            "mobilePhone,"
+            "officeLocation"
+        )
+    }
+
+    headers = {
+        "Authorization": f"Bearer {token}"
+    }
+
+    response = requests.get(
+        url,
+        headers=headers,
+        params=params,
+        timeout=10
+    )
+
+    if response.status_code == 403:
+        raise RuntimeError(
+            "Microsoft Graph refused access. "
+            "Check User.Read.All and admin consent."
+        )
+
+    response.raise_for_status()
+
+    return response.json().get("value", [])
