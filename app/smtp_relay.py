@@ -2,7 +2,7 @@ from pathlib import Path
 import smtplib
 from aiosmtpd.controller import Controller
 
-from email_processor import process_raw_email, extract_html_body
+from app.email_processor import process_raw_email, extract_html_body
 
 
 OUTPUT_DIR = Path("output")

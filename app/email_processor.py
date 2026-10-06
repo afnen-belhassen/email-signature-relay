@@ -3,8 +3,8 @@ from email.parser import BytesParser
 from email.message import EmailMessage
 from email.utils import parseaddr
 
-from signature_engine import generate_signature
-from email_injector import inject_signature
+from app.signature_engine import generate_signature
+from app.email_injector import inject_signature
 
 
 def process_raw_email(raw_email: bytes) -> bytes:

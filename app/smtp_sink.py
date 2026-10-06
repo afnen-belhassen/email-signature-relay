@@ -1,6 +1,6 @@
 from pathlib import Path
 from aiosmtpd.controller import Controller
-from email_processor import extract_html_body
+from app.email_processor import extract_html_body
 
 
 OUTPUT_DIR = Path("output")

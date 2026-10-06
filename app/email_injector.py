@@ -1,4 +1,4 @@
-from signature_engine import generate_signature
+from app.signature_engine import generate_signature
 
 
 SIGNATURE_MARKER = "<!-- signature-injected-by-email-signature-relay -->"
