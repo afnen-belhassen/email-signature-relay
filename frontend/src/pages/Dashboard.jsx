@@ -103,9 +103,6 @@ export default function Dashboard() {
             <StatCard
               label="Directory users"
               value={data?.users?.count ?? 0}
-              detail={
-                data?.users?.source === "local" ? "Local data" : "Microsoft Graph"
-              }
             />
             <StatCard
               label="Signature templates"
