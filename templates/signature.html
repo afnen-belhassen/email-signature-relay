@@ -1,13 +1,15 @@
-<br>
-<br>
-<table style="font-family: Arial, sans-serif; font-size: 13px;">
-  <tr>
-    <td>
-      <strong>{{ display_name }}</strong><br>
-      {{ job_title }}<br>
-      {{ department }}<br>
-      Phone: {{ phone }}<br>
-      Email: {{ email }}
-    </td>
-  </tr>
-</table>
+<strong>{{ display_name }}</strong><br>
+
+{% if job_title %}
+{{ job_title }}<br>
+{% endif %}
+
+{% if department %}
+{{ department }}<br>
+{% endif %}
+
+{% if phone %}
+Phone: {{ phone }}<br>
+{% endif %}
+
+Email: {{ email }}
