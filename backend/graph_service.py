@@ -138,3 +138,56 @@ def get_all_users():
     response.raise_for_status()
 
     return response.json().get("value", [])
+
+def send_mail(
+    sender_email: str,
+    recipient_email: str,
+    subject: str,
+    html_body: str
+):
+    token = get_access_token()
+
+    url = (
+        "https://graph.microsoft.com/v1.0/"
+        f"users/{sender_email}/sendMail"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "application/json",
+    }
+
+    payload = {
+        "message": {
+            "subject": subject,
+            "body": {
+                "contentType": "HTML",
+                "content": html_body,
+            },
+            "toRecipients": [
+                {
+                    "emailAddress": {
+                        "address": recipient_email
+                    }
+                }
+            ],
+        },
+        "saveToSentItems": True,
+    }
+
+    response = requests.post(
+        url,
+        headers=headers,
+        json=payload,
+        timeout=10,
+    )
+
+    if response.status_code == 403:
+        raise RuntimeError(
+            "Microsoft Graph refused access. "
+            "Check Mail.Send and admin consent."
+        )
+
+    response.raise_for_status()
+
+    return response.status_code
