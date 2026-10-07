@@ -1,3 +1,4 @@
+import os
 from pathlib import Path
 import smtplib
 from aiosmtpd.controller import Controller
@@ -8,8 +9,8 @@ from app.email_processor import process_raw_email, extract_html_body
 OUTPUT_DIR = Path("output")
 OUTPUT_DIR.mkdir(exist_ok=True)
 
-NEXT_SMTP_HOST = "127.0.0.1"
-NEXT_SMTP_PORT = 1026
+NEXT_SMTP_HOST = os.getenv("NEXT_SMTP_HOST", "127.0.0.1")
+NEXT_SMTP_PORT = int(os.getenv("NEXT_SMTP_PORT", "1026"))
 
 
 def forward_email(mail_from: str, rcpt_tos: list[str], raw_email: bytes):
