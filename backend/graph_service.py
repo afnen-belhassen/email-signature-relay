@@ -1,4 +1,5 @@
 import os
+import base64
 from pathlib import Path
 
 import msal
@@ -189,5 +190,52 @@ def send_mail(
         )
 
     response.raise_for_status()
+
+    return response.status_code
+def send_mime_mail(sender_email: str, raw_email: bytes):
+    """
+    Sends a complete MIME email through Microsoft Graph.
+
+    raw_email is the already processed email containing:
+    - original sender
+    - original recipients
+    - subject
+    - HTML/plain-text body
+    - injected signature
+    - MIME headers
+    """
+
+    token = get_access_token()
+
+    url = (
+        "https://graph.microsoft.com/v1.0/"
+        f"users/{sender_email}/sendMail"
+    )
+
+    headers = {
+        "Authorization": f"Bearer {token}",
+        "Content-Type": "text/plain",
+    }
+
+    encoded_email = base64.b64encode(raw_email).decode("ascii")
+
+    response = requests.post(
+        url,
+        headers=headers,
+        data=encoded_email,
+        timeout=20,
+    )
+
+    if response.status_code == 403:
+        raise RuntimeError(
+            "Microsoft Graph refused access. "
+            "Check Mail.Send and admin consent."
+        )
+
+    if response.status_code >= 400:
+        raise RuntimeError(
+            f"Microsoft Graph sendMail failed: "
+            f"{response.status_code} - {response.text}"
+        )
 
     return response.status_code
