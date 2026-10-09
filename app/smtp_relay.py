@@ -2,26 +2,47 @@ import os
 from pathlib import Path
 import smtplib
 from aiosmtpd.controller import Controller
+from backend.graph_service import send_mime_mail
 
 from app.email_processor import process_raw_email, extract_html_body
 
-
-OUTPUT_DIR = Path("output")
-OUTPUT_DIR.mkdir(exist_ok=True)
+DELIVERY_MODE = os.getenv("DELIVERY_MODE", "sink").lower()
 
 NEXT_SMTP_HOST = os.getenv("NEXT_SMTP_HOST", "127.0.0.1")
 NEXT_SMTP_PORT = int(os.getenv("NEXT_SMTP_PORT", "1026"))
 
 
+
+OUTPUT_DIR = Path("output")
+OUTPUT_DIR.mkdir(exist_ok=True)
+
 def forward_email(mail_from: str, rcpt_tos: list[str], raw_email: bytes):
     """
-    Sends the processed email to the next SMTP server.
-    In our POC, the next SMTP server is the local smtp_sink.py.
-    Later, this could be Microsoft 365.
+    Sends the processed email either:
+    - to the local SMTP server for testing
+    - or through Microsoft Graph for the Azure POC
     """
 
+    if DELIVERY_MODE == "graph":
+        send_mime_mail(
+            sender_email=mail_from,
+            raw_email=raw_email
+        )
+
+        print("Signed email sent through Microsoft Graph")
+        return
+
     with smtplib.SMTP(NEXT_SMTP_HOST, NEXT_SMTP_PORT) as smtp:
-        smtp.sendmail(mail_from, rcpt_tos, raw_email)
+        smtp.sendmail(
+            mail_from,
+            rcpt_tos,
+            raw_email
+        )
+
+    print(
+        f"Signed email forwarded to "
+        f"{NEXT_SMTP_HOST}:{NEXT_SMTP_PORT}"
+    )
 
 
 class SignatureRelayHandler:
